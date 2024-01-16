@@ -1,7 +1,7 @@
 import requests
 import pytest
 import allure
-from helpers import BASE_URL, ORDERS_ENDPOINT
+from data import BASE_URL, ORDERS_ENDPOINT
 
 
 class TestCreateOrder:
@@ -30,4 +30,3 @@ class TestCreateOrder:
             json=order_data
         )
         assert response.status_code == 201 and "track" in response.json()
-        print(response.text)

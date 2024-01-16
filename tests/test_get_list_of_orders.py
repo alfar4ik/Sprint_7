@@ -1,7 +1,7 @@
 import requests
 import allure
-from helpers import BASE_URL, LOGIN_COURIER_ENDPOINT, ORDERS_ENDPOINT
-from conftest import courier_response
+from data import BASE_URL, LOGIN_COURIER_ENDPOINT, ORDERS_ENDPOINT
+
 
 
 class TestGetOrders:
@@ -18,7 +18,6 @@ class TestGetOrders:
         courier_id = login_response.json()['id']
         response = requests.get(f"{BASE_URL}{ORDERS_ENDPOINT}", params={"courierId": courier_id})
         assert response.status_code == 200 and "orders" in response.json()
-        print(response.text)
 
 
     @allure.title("Получение заказов курьера у станций Рокоссовского и Черкизовская")
@@ -37,7 +36,6 @@ class TestGetOrders:
         }
         response = requests.get(f"{BASE_URL}{ORDERS_ENDPOINT}", params=params)
         assert response.status_code == 200 and "orders" in response.json()
-        print(response.text)
 
 
     @allure.title("Получение списка из 10 заказов для курьера")
@@ -47,7 +45,6 @@ class TestGetOrders:
         page = 1
         response = requests.get(f"{BASE_URL}{ORDERS_ENDPOINT}", params={"limit": limit, "page": page})
         assert response.status_code == 200 and "orders" in response.json()
-        print(response.text)
 
 
     @allure.title("Получение 10 заказов для курьера рядом с метро Калужская")
@@ -59,7 +56,6 @@ class TestGetOrders:
         response = requests.get(f"{BASE_URL}{ORDERS_ENDPOINT}",
                                 params={"limit": limit, "page": page, "nearestStation": nearest_station})
         assert response.status_code == 200 and "orders" in response.json()
-        print(response.text)
 
 
     @allure.title("Проверка превышения лимита заказов")
@@ -70,7 +66,6 @@ class TestGetOrders:
         response = requests.get(f"{BASE_URL}{ORDERS_ENDPOINT}", params={"limit": limit, "page": page})
         page_info = response.json().get("pageInfo", {})
         assert page_info.get("limit", 0) == 30
-        print(response.text)
 
 
     @allure.title("Получение заказов для несуществующего курьера")
@@ -79,7 +74,6 @@ class TestGetOrders:
         nonexistent_courier_id = "99999"
         response = requests.get(f"{BASE_URL}{ORDERS_ENDPOINT}", params={"courierId": nonexistent_courier_id})
         assert response.status_code == 404 and response.json().get('message') == f"Курьер с идентификатором {nonexistent_courier_id} не найден"
-        print(response.text)
 
 
 

@@ -2,10 +2,11 @@ import pytest
 import requests
 import random
 import string
-from helpers import BASE_URL, DELETE_COURIER_ENDPOINT, CREATE_COURIER_ENDPOINT, LOGIN_COURIER_ENDPOINT
+from data import BASE_URL, DELETE_COURIER_ENDPOINT, CREATE_COURIER_ENDPOINT, LOGIN_COURIER_ENDPOINT
 
 def generate_random_string(length):
     return ''.join(random.choice(string.ascii_lowercase) for _ in range(length))
+
 @pytest.fixture(scope="function")
 def courier_response():
     login = generate_random_string(8)
@@ -33,7 +34,5 @@ def courier_response():
         json={"login": login, "password": password}
     )
     courier_id = login_response.json().get('id')
-    print(courier_id)
-    if courier_id:
-        requests.delete(f"{BASE_URL}{DELETE_COURIER_ENDPOINT}{courier_id}")
+    requests.delete(f"{BASE_URL}{DELETE_COURIER_ENDPOINT}{courier_id}")
 

@@ -1,7 +1,7 @@
 import requests
-from helpers import BASE_URL, LOGIN_COURIER_ENDPOINT, DELETE_COURIER_ENDPOINT
+from data import BASE_URL, LOGIN_COURIER_ENDPOINT, DELETE_COURIER_ENDPOINT
 import allure
-from conftest import courier_response
+
 
 
 class TestCourierDeletion:

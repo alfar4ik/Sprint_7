@@ -1,7 +1,7 @@
 import requests
-from helpers import BASE_URL, LOGIN_COURIER_ENDPOINT
+from data import BASE_URL, LOGIN_COURIER_ENDPOINT
 import allure
-from conftest import courier_response
+
 
 
 class TestCourierLogin:
@@ -16,7 +16,6 @@ class TestCourierLogin:
             json={"login": courier_data['login'], "password": courier_data['password']}
         )
         assert response.status_code == 200 and "id" in response.json()
-        print(response.text)
 
 
     @allure.title("Вход курьера без указания пароля")
@@ -28,7 +27,6 @@ class TestCourierLogin:
             json={"password": courier_data['password']}
         )
         assert response.status_code == 400 and response.json()['message'] == "Недостаточно данных для входа"
-        print(response.text)
 
 
     @allure.title("Вход курьера без указания логина")
@@ -40,7 +38,6 @@ class TestCourierLogin:
             json={"login": courier_data['login']}
         )
         assert response.status_code == 400 and response.json()['message'] == "Недостаточно данных для входа"
-        print(response.text)
 
 
     @allure.title("Вход курьера с неверным паролем")
@@ -52,7 +49,6 @@ class TestCourierLogin:
             json={"login": courier_data['login'], "password": "wrong_password"}
         )
         assert response.status_code == 404 and response.json()['message'] == "Учетная запись не найдена"
-        print(response.text)
 
 
     @allure.title("Вход несуществующего курьера")
@@ -64,6 +60,5 @@ class TestCourierLogin:
             json={"login": "nonexistentuser", "password": courier_data['password']}
         )
         assert response.status_code == 404 and response.json()['message'] == "Учетная запись не найдена"
-        print(response.text)
 
 

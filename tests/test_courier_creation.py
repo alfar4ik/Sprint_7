@@ -1,7 +1,7 @@
 import requests
 import allure
-from helpers import BASE_URL, CREATE_COURIER_ENDPOINT
-from conftest import courier_response
+from data import BASE_URL, CREATE_COURIER_ENDPOINT
+
 
 
 class TestCourierCreation:
@@ -12,7 +12,6 @@ class TestCourierCreation:
     def test_create_courier_success(self, courier_response):
         response, _ = courier_response
         assert response.status_code == 201 and response.json() == {"ok": True}
-        print(response.text)
 
 
     @allure.title("Создание курьера без логина")
@@ -23,7 +22,6 @@ class TestCourierCreation:
         modified_data.pop('login', None)
         response = requests.post(f"{BASE_URL}{CREATE_COURIER_ENDPOINT}", json=modified_data)
         assert response.status_code == 400 and response.json().get('message') == "Недостаточно данных для создания учетной записи"
-        print(response.text)
 
 
     @allure.title("Создание курьера с дублирующимся логином")
@@ -32,4 +30,3 @@ class TestCourierCreation:
         response, courier_data = courier_response
         duplicate_response = requests.post(f"{BASE_URL}{CREATE_COURIER_ENDPOINT}", json=courier_data)
         assert duplicate_response.status_code == 409 and duplicate_response.json().get('message') == "Этот логин уже используется"
-        print(response.text)
